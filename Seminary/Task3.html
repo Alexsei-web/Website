@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Запись на игру в майнкрафт</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 30px 20px;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: #e8f5e9;                          
+      color: #1f2a37;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: start;
+    }
+
+
+    .title {
+      grid-column: 1 / -1;
+      margin: 0 0 10px;
+      padding: 14px 20px;
+      font-size: 26px;
+      font-weight: 700;
+      text-align: center;
+      color: #ffffff;                             
+      background: #1b5e20;                         
+      border-radius: 12px;
+    }
+
+    .column {
+      padding: 20px;
+      border: 1px solid #c8e6c9;               
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 4px 14px rgba(27, 94, 32, 0.08);
+    }
+
+
+    .column h2 {
+      margin: 0 0 18px;
+      padding: 10px 14px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff;                         
+      background: #1b5e20;                        
+      border-radius: 8px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field > label,
+    .field > .field-label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2d3a4e;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #1f2a37;
+      background: #ffffff;
+      border: 1px solid #cfdae9;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s, background-color .15s;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #2e7d32;
+      box-shadow: 0 0 0 3px rgba(46, 125, 50, .15);
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+    }
+
+    .options label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #2e7d32;                         
+      cursor: pointer;
+    }
+
+    .hint {
+      margin: 5px 0 0;
+      font-size: 12px;
+      color: #8a94a6;
+    }
+
+    input:user-invalid ~ .hint {
+      color: #e04b4b;
+    }
+
+    input.fullname,
+    input.group,
+    input.teacher {
+      padding-right: 38px;
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+    }
+
+    input.fullname:user-valid,
+    input.group:user-valid,
+    input.teacher:user-valid {
+      border-color: #34a853;
+      background-color: #f2fbf5;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2334a853' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 13l5 5L20 6'/%3E%3C/svg%3E");
+    }
+
+    input.fullname:user-invalid,
+    input.group:user-invalid,
+    input.teacher:user-invalid {
+      border-color: #e04b4b;
+      background-color: #fdf3f3;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23e04b4b' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E");
+    }
+
+    /* Кнопка — тёмно-зелёная */
+    button[type="submit"] {
+      grid-column: 1 / -1;
+      justify-self: center;
+      margin-top: 6px;
+      padding: 12px 48px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      background: #1b5e20;                  
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+    }
+
+    button[type="submit"]:hover {
+      background: #14471a;                          
+    }
+
+    button[type="submit"]:active {
+      transform: scale(0.98);
+    }
+
+    @media (max-width: 700px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <form action="#" method="post">
+    <h1 class="title">Запись на игру в майнкрафт</h1>
+
+    <div class="column">
+      <h2>Информация о игроке</h2>
+
+      <div class="field">
+        <label for="fullname">ФИО игрока:</label>
+        <input type="text"
+               id="fullname"
+               name="fullname"
+               class="fullname"
+               placeholder="Иванов Иван Иванович"
+               maxlength="256"
+               pattern="[А-ЯЁ][а-яё]+\s+[А-ЯЁ][а-яё]+\s+[А-ЯЁ][а-яё]+"
+               title="Введите три слова на кириллице: Фамилия Имя Отчество"
+               autofocus
+               required>
+        <p class="hint">Введите три слова на кириллице: Фамилия Имя Отчество</p>
+      </div>
+
+      <div class="field">
+        <label for="course">Сколько лет вы в деле:</label>
+        <input type="number"
+               id="course"
+               name="course"
+               min="1"
+               max="10"
+               step="1"
+               placeholder="1"
+               title="Курс — число от 1 до 10">
+      </div>
+
+      <div class="field">
+        <span class="field-label">Стиль игры:</span>
+        <div class="options">
+          <label><input type="radio" name="faculty" value="it" checked> Шахтер</label>
+          <label><input type="radio" name="faculty" value="econom"> Строитель</label>
+          <label><input type="radio" name="faculty" value="human"> PVP - гений</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Электронная почта:</label>
+        <input type="email"
+               id="email"
+               name="email"
+               placeholder="igrokbeztormozov@mail.ru"
+               maxlength="256"
+               title="Например: igrokbeztormozov@mail.ru">
+      </div>
+
+      <div class="field">
+        <span class="field-label">Почему вы играете в майнкрафт?:</span>
+        <div class="options">
+          <label><input type="checkbox" name="interests" value="tech"> Интересно выживать </label>
+          <label><input type="checkbox" name="interests" value="psychology"> Интересно играть с друзьями</label>
+          <label><input type="checkbox" name="interests" value="literature"> Просто</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="group">Номер вашего ID</label>
+        <input type="text"
+               id="group"
+               name="group"
+               class="group"
+               placeholder="123456"
+               maxlength="6"
+               pattern="\d{6}"
+               title="Только цифры, 6 символов (например, 123456)"
+               required>
+        <p class="hint">Только цифры, 6 символов (например, 123456)</p>
+      </div>
+    </div>
+
+    
+    <div class="column">
+      <h2>Информация о тебе</h2>
+
+      <div class="field">
+        <label for="subject">Где учишься:</label>
+        <select id="subject"
+                name="subject"
+                title="Выберите предмет из списка"
+                required>
+          <option value="web" selected>Школа</option>
+          <option value="math">Вуз</option>
+          <option value="db">Колледж</option>
+          <option value="physics">Магистратура</option>
+          <option value="history">Аспирантура</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="date">Дата рождения:</label>
+        <input type="date"
+               id="date"
+               name="date"
+               title="Выберите дату сдачи зачёта">
+      </div>
+
+
+      <div class="field">
+        <span class="field-label">Твой пол:</span>
+        <div class="options">
+          <label><input type="radio" name="form" value="offline" checked> Мужской</label>
+          <label><input type="radio" name="form" value="online"> Женский</label>
+        </div>
+      </div>
+    </div>
+
+
+    <button type="submit">Записаться</button>
+  </form>
+</body>
+</html>
