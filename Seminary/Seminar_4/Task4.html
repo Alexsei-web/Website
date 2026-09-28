@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed, Relative, Absolute</title>
+    <style>
+        /* ============================================
+           ОБЩИЕ СТИЛИ И СБРОС
+           ============================================ */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #e2e8f0; /* Серый фон */
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        section {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 50px;
+            width: 100%;
+            max-width: 900px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #cbd5e1;
+        }
+
+        h2 {
+            color: #8b0000;
+            border-bottom: 2px dashed #d4af37;
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        p {
+            color: #475569;
+            font-size: 1.05rem;
+        }
+
+        code {
+            background-color: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #c0392b;
+            font-family: Consolas, monospace;
+            font-size: 0.95em;
+        }
+
+        /* ============================================
+           ЧАСТЬ 1. FIXED
+           ============================================ */
+        /* Первое закрепленное сообщение */
+        .fixed-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #8b0000, #5a0000);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 8px;
+            border-left: 6px solid #d4af37;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-width: 300px;
+            font-size: 0.95rem;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .fixed-message strong {
+            display: block;
+            color: #d4af37;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        /* Второе закрепленное сообщение (новое) */
+        .fixed-sub-message {
+            position: fixed;
+            top: 145px; /* Сдвигаем вниз, чтобы было под первым */
+            right: 20px;
+            background: linear-gradient(135deg, #0f766e, #115e59); 
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 8px;
+            border-left: 6px solid #d4af37;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-width: 300px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            animation: slideIn 0.5s ease-out 0.2s both; 
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ============================================
+           ЧАСТЬ 2. RELATIVE
+           ============================================ */
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 30px;
+            padding-left: 20px;
+        }
+
+        .card {
+            padding: 20px;
+            border-radius: 12px;
+            color: #fff;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            width: 220px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .card strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .relative-card {
+            position: relative;
+        }
+
+        .blue-card {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+
+        .bronze-card {
+            background: linear-gradient(135deg, #b67a2e 0%, #8b5a2b 100%);
+        }
+
+        .cards-container .card:nth-child(3) {
+            top: 20px;
+            left: 60px;
+        }
+
+        .cards-container .card:nth-child(4) {
+            top: 10px;
+            left: 30px;
+        }
+
+        /* ============================================
+           ЧАСТЬ 3. ABSOLUTE — ПЕРЕКРЫТИЕ
+           ============================================ */
+        .absolute-container {
+            position: relative;
+            height: 350px;
+            background-color: #e6f4ea;
+            border: 2px dashed #b8d8ba;
+            border-radius: 16px;
+            margin-top: 30px;
+            overflow: hidden;
+        }
+
+        .absolute-card {
+            position: absolute;
+            padding: 18px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #2f5a45 0%, #1b3b2b 100%);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            width: 200px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .absolute-card:hover {
+            transform: scale(1.05);
+            z-index: 100 !important;
+        }
+
+        .absolute-card strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.05rem;
+        }
+
+        .absolute-card p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .absolute-container .absolute-card:nth-child(1) {
+            top: 30px;
+            left: 30px;
+            z-index: 1;
+            opacity: 0.85;
+        }
+
+        .absolute-container .absolute-card:nth-child(2) {
+            top: 70px;
+            left: 80px;
+            z-index: 2;
+            opacity: 0.9;
+        }
+
+        .absolute-container .absolute-card:nth-child(3) {
+            top: 110px;
+            left: 130px;
+            z-index: 10;
+            background: linear-gradient(135deg, #3b7657 0%, #234b36 100%);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border: 1px solid #d4af37;
+        }
+
+        .absolute-container .absolute-card:nth-child(4) {
+            top: 150px;
+            left: 180px;
+            z-index: 3;
+            background: linear-gradient(135deg, #7a7a7a 0%, #4a4a4a 100%);
+        }
+
+        /* ============================================
+           ЧАСТЬ 4. ABSOLUTE — ПО УГЛАМ
+           ============================================ */
+        .corners-area {
+            position: relative;
+            height: 400px;
+            background-color: #f8fafc;
+            border: 2px dashed #94a3b8;
+            border-radius: 16px;
+            margin-top: 30px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        .corner-card {
+            position: absolute;
+            padding: 18px;
+            border-radius: 12px;
+            color: #fff;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            width: 180px;
+            transition: transform 0.3s ease;
+        }
+
+        .corner-card:hover {
+            transform: scale(1.05);
+        }
+
+        .corner-card strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1.05rem;
+        }
+
+        .corner-card p {
+            margin: 0;
+            font-size: 0.85rem;
+        }
+
+        .yellow-card {
+            background: linear-gradient(135deg, #f4d03f 0%, #f39c12 100%);
+            color: #333;
+        }
+
+        .yellow-card p {
+            color: #555;
+        }
+
+        .dark-card {
+            background: linear-gradient(135deg, #4a3b2c 0%, #2b2015 100%);
+            color: #fff;
+        }
+
+        .corners-area .corner-card:nth-child(1) {
+            top: 20px;
+            left: 20px;
+        }
+
+        .corners-area .corner-card:nth-child(2) {
+            top: 20px;
+            right: 20px;
+        }
+
+        .corners-area .corner-card:nth-child(3) {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .corners-area .corner-card:nth-child(4) {
+            bottom: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================
+         FIXED — сообщения в углу окна
+         ============================================ -->
+    <div class="fixed-message">
+        <strong>📌 Fixed</strong>
+        Учимся позиционировать элементы
+    </div>
+    
+    <!-- Новое второе сообщение -->
+    <div class="fixed-sub-message">
+        Тренировка по закреплению сообщения!
+    </div>
+
+    <h1>⚡ Fixed, Relative, Absolute ⚡</h1>
+
+    <!-- ============================================
+         ЧАСТЬ 1. FIXED
+         ============================================ -->
+    <section>
+        <h2>🦁 Часть 1. position: fixed</h2>
+        <p>
+            Тёмно-красное сообщение <strong>«Учимся позиционировать элементы»</strong> с золотой
+            полоской закреплено в правом верхнем углу окна. Оно <strong>не двигается при
+            прокрутке</strong> — это ключевое отличие fixed от absolute.
+        </p>
+        <p>
+            Свойства: <code>position: fixed; top: 20px; right: 20px;</code>.
+            Fixed позиционируется относительно <strong>окна браузера</strong>, а не родителя.
+        </p>
+    </section>
+
+    <!-- ============================================
+         ЧАСТЬ 2. RELATIVE
+         ============================================ -->
+    <section>
+        <h2>🦅 Часть 2. position: relative</h2>
+        <p>
+            Первые две карточки (синие) — без отступов, стоят в обычном потоке.
+            Вторые две (бронзовые) — со сдвигом через top/left. Место в потоке за ними
+            сохраняется, поэтому карточка №3 не «подъезжает» к №2.
+        </p>
+
+        <div class="cards-container">
+            <div class="card relative-card blue-card">
+                <strong>Карточка 1</strong>
+                <p>relative; без отступов</p>
+            </div>
+
+            <div class="card relative-card blue-card">
+                <strong>Карточка 2</strong>
+                <p>relative; без отступов</p>
+            </div>
+
+            <div class="card relative-card bronze-card">
+                <strong>Карточка 3</strong>
+                <p>top: 20px; left: 60px;</p>
+            </div>
+
+            <div class="card relative-card bronze-card">
+                <strong>Карточка 4</strong>
+                <p>top: 10px; left: 30px;</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         ЧАСТЬ 3. ABSOLUTE — перекрытие
+         ============================================ -->
+    <section>
+        <h2>🐍 Часть 3. position: absolute — перекрытие</h2>
+        <p>
+            Все карточки вырваны из потока и позиционируются относительно зелёного блока
+            (у него position: relative). <strong>Карточка №3 — верхняя</strong>:
+            у неё z-index: 10, поэтому она перекрывает остальные.
+        </p>
+
+        <div class="absolute-container">
+            <div class="absolute-card">
+                <strong>Карточка 1</strong>
+                <p>z-index: 1</p>
+            </div>
+            <div class="absolute-card">
+                <strong>Карточка 2</strong>
+                <p>z-index: 2</p>
+            </div>
+            <div class="absolute-card">
+                <strong>Карточка 3</strong>
+                <p>z-index: 10 ← верхняя</p>
+            </div>
+            <div class="absolute-card">
+                <strong>Карточка 4</strong>
+                <p>z-index: 3</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         ЧАСТЬ 4. ABSOLUTE — по углам
+         ============================================ -->
+    <section>
+        <h2>🦡 Часть 4. Карточки по углам</h2>
+        <p>
+            Каждая карточка прижата к своему углу. Используются пары свойств:
+            <code>top</code>/<code>left</code> для верхних, <code>bottom</code>/<code>right</code>
+            для нижних. Родитель должен иметь <code>position: relative</code>.
+        </p>
+
+        <div class="corners-area">
+            <div class="corner-card yellow-card">
+                <strong>Левый верхний</strong>
+                <p>top: 15px; left: 15px;</p>
+            </div>
+            <div class="corner-card yellow-card">
+                <strong>Правый верхний</strong>
+                <p>top: 15px; right: 15px;</p>
+            </div>
+            <div class="corner-card dark-card">
+                <strong>Левый нижний</strong>
+                <p>bottom: 15px; left: 15px;</p>
+            </div>
+            <div class="corner-card dark-card">
+                <strong>Правый нижний</strong>
+                <p>bottom: 15px; right: 15px;</p>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
