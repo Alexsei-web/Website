@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Задание 5. Flex, Grid, адаптивность</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 40px 0 20px;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin: 0 0 8px;
+    }
+
+    .example {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+    }
+
+    .example p {
+      margin: 0 0 18px;
+      color: #475569;
+    }
+
+    code {
+      background: #e2e8f0;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.9em;
+    }
+
+    .team-row {
+      display: flex;
+      gap: 20px;
+    }
+
+    .person-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .avatar-blue { background: #3b82f6; }
+    .avatar-purple { background: #8b5cf6; }
+    .avatar-green { background: #22c55e; }
+
+    .person-card h3 {
+      margin: 0 0 6px;
+      font-size: 1.1rem;
+    }
+
+    .person-card p {
+      margin: 0;
+      color: #3b82f6;
+      font-size: 0.9rem;
+    }
+
+    .products-row {
+      display: flex;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .product-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .product-icon {
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+    }
+
+    .product-card h3 {
+      margin: 16px 16px 8px;
+      font-size: 1.1rem;
+    }
+
+    .product-card p {
+      margin: 0 16px 12px;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .price {
+      margin: auto 16px 12px;
+      font-weight: 700;
+      color: #2563eb;
+      font-size: 1.2rem;
+    }
+
+    .product-card button {
+      margin: 0 16px 16px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 8px;
+      background: #3b82f6;
+      color: #ffffff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .product-card button:hover {
+      background: #2563eb;
+    }
+
+    .magazine-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(5, 80px);
+      gap: 12px;
+    }
+
+    .mag {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      text-align: center;
+      padding: 8px;
+    }
+
+    .big-1 {
+      grid-column: 1 / 3;
+      grid-row: 1 / 3;
+      background: #3b82f6;
+    }
+
+    .tall-1 {
+      grid-column: 3 / 4;
+      grid-row: 1 / 3;
+      background: #ef4444;
+    }
+
+    .small-green {
+      grid-column: 4 / 5;
+      grid-row: 1 / 2;
+      background: #22c55e;
+    }
+
+    .small-orange {
+      grid-column: 4 / 5;
+      grid-row: 2 / 3;
+      background: #f59e0b;
+    }
+
+    .wide-1 {
+      grid-column: 1 / 3;
+      grid-row: 3 / 4;
+      background: #a855f7;
+    }
+
+    .small-cyan {
+      grid-column: 3 / 4;
+      grid-row: 3 / 4;
+      background: #06b6d4;
+    }
+
+    .big-2 {
+      grid-column: 1 / 3;
+      grid-row: 4 / 6;
+      background: #ec4899;
+    }
+
+    .small-lime {
+      grid-column: 3 / 4;
+      grid-row: 4 / 5;
+      background: #84cc16;
+    }
+
+    .small-deep-orange {
+      grid-column: 4 / 5;
+      grid-row: 4 / 5;
+      background: #f97316;
+    }
+
+    .mosaic-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(4, 80px);
+      gap: 12px;
+    }
+
+    .m {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 8px;
+    }
+
+    .m1 {
+      grid-column: 1 / 4;
+      grid-row: 1 / 3;
+      background: #3b82f6;
+    }
+
+    .m2 {
+      grid-column: 4 / 5;
+      grid-row: 1 / 3;
+      background: #ef4444;
+    }
+
+    .m3 {
+      grid-column: 5 / 7;
+      grid-row: 1 / 2;
+      background: #22c55e;
+    }
+
+    .m4 {
+      grid-column: 5 / 7;
+      grid-row: 2 / 3;
+      background: #f59e0b;
+    }
+
+    .m5 {
+      grid-column: 2 / 4;
+      grid-row: 3 / 4;
+      background: #a855f7;
+    }
+
+    .m6 {
+      grid-column: 4 / 5;
+      grid-row: 3 / 4;
+      background: #06b6d4;
+    }
+
+    .m7 {
+      grid-column: 1 / 4;
+      grid-row: 4 / 5;
+      background: #ec4899;
+    }
+
+    .m8 {
+      grid-column: 6 / 7;
+      grid-row: 4 / 5;
+      background: #84cc16;
+    }
+
+    @media (max-width: 768px) {
+      .team-row,
+      .products-row {
+        flex-direction: column;
+      }
+
+      .person-card,
+      .product-card {
+        flex: none;
+        width: 100%;
+      }
+
+      .magazine-grid,
+      .mosaic-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .magazine-grid > *,
+      .mosaic-grid > * {
+        width: 100%;
+        min-height: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>Примеры на Flexbox</h1>
+
+    <section class="example">
+      <h2>Пример 1. Команда из трёх человек</h2>
+      <p>
+        Три карточки в ряд через <code>display: flex</code>. Каждая карточка
+        растягивается одинаково (<code>flex: 1</code>), внутри — колоночный Flex
+        для центрирования аватара и текста.
+      </p>
+
+      <div class="team-row">
+        <article class="person-card">
+          <div class="avatar avatar-blue">А</div>
+          <h3>Алексей</h3>
+          <p>Ученик группы 2253</p>
+        </article>
+
+        <article class="person-card">
+          <div class="avatar avatar-purple">М</div>
+          <h3>Дима</h3>
+          <p>Еще один участник группы 2253</p>
+        </article>
+
+        <article class="person-card">
+          <div class="avatar avatar-green">И</div>
+          <h3>Коля</h3>
+          <p>Преподаватель</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="example">
+      <h2>Пример 2. Карточки товаров с выравниванием</h2>
+
+      <div class="products-row">
+        <article class="product-card">
+          <div class="product-icon">📱</div>
+          <h3>Iphone</h3>
+          <p>Современный смартфон с отличной камерой и большим экраном.</p>
+          <div class="price">108 000 ₽</div>
+          <button type="button">Купить</button>
+        </article>
+
+        <article class="product-card">
+          <div class="product-icon">💻</div>
+          <h3>Ноутбук</h3>
+          <p>Мощный ноутбук для работы и "учёбы".</p>
+          <div class="price">160 990 ₽</div>
+          <button type="button">Купить</button>
+        </article>
+
+        <article class="product-card">
+          <div class="product-icon">🎧</div>
+          <h3>Наушники</h3>
+          <p>Беспроводные наушники с шумоподавлением.</p>
+          <div class="price">8 990 ₽</div>
+          <button type="button">Купить</button>
+        </article>
+      </div>
+    </section>
+
+    <h1>Примеры на Grid</h1>
+
+    <section class="example">
+      <h2>Пример 1. «Журнальный» коллаж — сетка 4×4</h2>
+      <p>
+        Классический журнальный разворот: одно большое фото, несколько средних
+        и пара маленьких. Все ячейки объединяются через
+        <code>grid-column: span</code> и <code>grid-row: span</code>.
+      </p>
+
+      <div class="magazine-grid">
+        <div class="mag big-1">big-1 (2×2)</div>
+        <div class="mag tall-1">tall-1 (1×2)</div>
+        <div class="mag small-green">small</div>
+        <div class="mag small-orange">small</div>
+        <div class="mag wide-1">wide-1 (2×1)</div>
+        <div class="mag small-cyan">small</div>
+        <div class="mag big-2">big-2 (2×2)</div>
+        <div class="mag small-lime">small</div>
+        <div class="mag small-deep-orange">small</div>
+      </div>
+    </section>
+
+    <section class="example">
+      <h2>Пример 2. «Мозаика» с пустым местом — сетка 6×4</h2>
+      <p>
+        Более сложная раскладка: главное фото слева, вертикальное справа,
+        а между ними — пустая зона. Пустое место создаётся через
+        <code>grid-column-start</code> и <code>grid-column-end</code>:
+        мы явно указываем, в какую колонку встать элемент, пропуская одну.
+      </p>
+
+      <div class="mosaic-grid">
+        <div class="m m1">m1 (3×2)</div>
+        <div class="m m2">m2 (1×2)</div>
+        <div class="m m3">m3 (2×1)</div>
+        <div class="m m4">m4 (2×1)</div>
+        <div class="m m5">m5 (2×1)</div>
+        <div class="m m6">m6 (1×1)</div>
+        <div class="m m7">m7 (3×1)</div>
+        <div class="m m8">m8 (1×1)</div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
