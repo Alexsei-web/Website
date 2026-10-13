@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 6. Таймер</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #e5e5e5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .timer-card {
+            background-color: #2b2b3a;
+            border-radius: 15px;
+            padding: 30px;
+            width: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .card-title {
+            color: #7a7a8c;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .current-time-display {
+            background-color: #1a1a24;
+            color: #39ff14; 
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 36px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid #39ff14;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .blue-btn {
+            background-color: #3b82f6;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+        }
+        .blue-btn:hover { background-color: #2563eb; }
+
+        .countdown-display {
+            display: none;
+            width: 100%;
+            background-color: #ef4444;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+            letter-spacing: 2px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #2b2b3a;
+            border-radius: 15px;
+            padding: 25px;
+            width: 350px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #3a3a4a;
+            color: #a0a0b0;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .close-btn:hover { background: #4a4a5a; color: white; }
+
+        .modal-title {
+            color: #22c55e; 
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .input-label {
+            color: #a0a0b0;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .seconds-input {
+            width: 100%;
+            background-color: #1a1a24;
+            border: 2px solid #22c55e;
+            border-radius: 8px;
+            color: #22c55e;
+            font-size: 24px;
+            padding: 10px;
+            text-align: center;
+            outline: none;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 10px rgba(34, 197, 94, 0.2);
+        }
+        .seconds-input::placeholder { color: #4a4a5a; }
+
+        .green-btn {
+            background-color: #22c55e;
+            box-shadow: 0 4px 10px rgba(34, 197, 94, 0.4);
+            text-transform: uppercase;
+        }
+        .green-btn:hover { background-color: #16a34a; }
+    </style>
+</head>
+<body>
+
+    <div class="timer-card">
+        <div class="card-title">Текущее время</div>
+        <div class="current-time-display" id="current-time">00:00:00</div>
+        <button class="action-btn blue-btn" id="open-modal-btn">Установить таймер</button>
+        <div class="countdown-display" id="countdown-display">00:00:00</div>
+    </div>
+
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" id="close-modal-btn">✕</button>
+            <div class="modal-title">Установить таймер</div>
+            
+            <label class="input-label" for="seconds-input">Количество секунд</label>
+            <input type="text" class="seconds-input" id="seconds-input" placeholder="60" autocomplete="off">
+            
+            <button class="action-btn green-btn" id="start-timer-btn">Старт</button>
+        </div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        const modalOverlay = document.getElementById('modal-overlay');
+        const openModalBtn = document.getElementById('open-modal-btn');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const secondsInput = document.getElementById('seconds-input');
+        const startTimerBtn = document.getElementById('start-timer-btn');
+        const countdownDisplay = document.getElementById('countdown-display');
+
+        openModalBtn.addEventListener('click', () => {
+            modalOverlay.style.display = 'flex';
+            secondsInput.focus();
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+            secondsInput.value = '';
+        });
+
+        secondsInput.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+            
+            if (this.value.length > 4) {
+                this.value = this.value.slice(0, 4);
+            }
+        });
+
+        let timerInterval = null;
+
+        function formatTime(totalSeconds) {
+            const h = Math.floor(totalSeconds / 3600);
+            const m = Math.floor((totalSeconds % 3600) / 60);
+            const s = totalSeconds % 60;
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        startTimerBtn.addEventListener('click', () => {
+            const seconds = parseInt(secondsInput.value);
+
+            if (isNaN(seconds) || seconds <= 0) {
+                alert('Пожалуйста, введите число больше 0');
+                return;
+            }
+
+            modalOverlay.style.display = 'none';
+            secondsInput.value = '';
+
+            openModalBtn.style.display = 'none';
+            countdownDisplay.style.display = 'block';
+
+            let remainingSeconds = seconds;
+            countdownDisplay.textContent = formatTime(remainingSeconds);
+
+            timerInterval = setInterval(() => {
+                remainingSeconds--;
+                
+                if (remainingSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    countdownDisplay.textContent = '00:00:00';
+
+                    alert('Таймер завершён!');
+                    
+
+                    resetTimer();
+                } else {
+                    countdownDisplay.textContent = formatTime(remainingSeconds);
+                }
+            }, 1000);
+        });
+
+        function resetTimer() {
+            countdownDisplay.style.display = 'none';
+            openModalBtn.style.display = 'block';
+            clearInterval(timerInterval);
+        }
+    </script>
+</body>
+</html>
