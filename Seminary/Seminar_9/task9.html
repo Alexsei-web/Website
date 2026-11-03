@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои задачи</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .app-container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #1f2937;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .add-form {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .add-form input[type="text"] {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .add-form input[type="text"]:focus {
+            border-color: #3b82f6;
+        }
+
+        .add-form input[type="date"] {
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            color: #374151;
+        }
+
+        .add-form button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .add-form button:hover {
+            background-color: #2563eb;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 13px;
+            margin-bottom: 16px;
+            min-height: 18px;
+        }
+
+        .filter-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #4b5563;
+        }
+
+        .filter-section select {
+            padding: 6px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            outline: none;
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background-color: #ffffff;
+            transition: all 0.2s;
+        }
+
+        .task-item.overdue {
+            border-color: #fca5a5;
+            background-color: #fef2f2;
+        }
+
+        .task-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .task-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .task-date {
+            font-size: 13px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .task-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .task-actions select {
+            padding: 6px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+            background-color: #ffffff;
+        }
+
+        .task-actions .delete-btn {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .task-actions .delete-btn:hover {
+            background-color: #dc2626;
+        }
+
+        .summary {
+            text-align: right;
+            font-size: 14px;
+            color: #6b7280;
+            padding-top: 16px;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        /* Пустое состояние */
+        .empty-state {
+            text-align: center;
+            color: #9ca3af;
+            padding: 20px;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <h1>📋 Мои задачи</h1>
+        
+        <div class="add-form">
+            <input type="text" id="task-title" placeholder="Название задачи" maxlength="100">
+            <input type="date" id="task-date">
+            <button id="add-btn">Добавить</button>
+        </div>
+        <div class="error-msg" id="error-message"></div>
+
+        <div class="filter-section">
+            <label>Фильтр по статусу:</label>
+            <select id="filter-select">
+                <option value="all">Все</option>
+                <option value="todo">В работе</option>
+                <option value="done">Выполнено</option>
+                <option value="postponed">Отложено</option>
+            </select>
+        </div>
+
+        <div class="task-list" id="task-list">
+
+        </div>
+
+        <div class="summary" id="summary">
+            Всего: 0 | Выполнено: 0 | Просрочено: 0
+        </div>
+    </div>
+
+    <script>
+  
+        const STORAGE_KEY = 'tasks';
+        let tasks = [];
+        let currentFilter = 'all';
+
+        const titleInput = document.getElementById('task-title');
+        const dateInput = document.getElementById('task-date');
+        const addBtn = document.getElementById('add-btn');
+        const errorMsg = document.getElementById('error-message');
+        const filterSelect = document.getElementById('filter-select');
+        const taskList = document.getElementById('task-list');
+        const summary = document.getElementById('summary');
+
+        // Загрузка из localStorage
+        function loadTasks() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            if (data) {
+                try {
+                    tasks = JSON.parse(data);
+                } catch (e) {
+                    tasks = [];
+                }
+            } else {
+                tasks = [];
+            }
+        }
+
+
+        function saveTasks() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+        }
+
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const [year, month, day] = dateString.split('-');
+            return `${day}.${month}.${year}`;
+        }
+
+
+        function isOverdue(dateString, status) {
+            if (status === 'done') return false;
+            if (!dateString) return false;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const taskDate = new Date(dateString + 'T00:00:00');
+            taskDate.setHours(0, 0, 0, 0);
+            
+            return taskDate < today;
+        }
+
+    
+        function render() {
+          
+            let filteredTasks = tasks;
+            if (currentFilter !== 'all') {
+                filteredTasks = tasks.filter(task => task.status === currentFilter);
+            }
+
+      
+            filteredTasks.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+   
+            taskList.innerHTML = '';
+            
+            if (filteredTasks.length === 0) {
+                taskList.innerHTML = '<div class="empty-state">Задачи не найдены</div>';
+            } else {
+                filteredTasks.forEach(task => {
+                    const overdueClass = isOverdue(task.date, task.status) ? 'overdue' : '';
+                    
+                    const taskEl = document.createElement('div');
+                    taskEl.className = `task-item ${overdueClass}`;
+                    
+                    taskEl.innerHTML = `
+                        <div class="task-info">
+                            <h3 class="task-title">${task.title}</h3>
+                            <span class="task-date">📅 ${formatDate(task.date)}</span>
+                        </div>
+                        <div class="task-actions">
+                            <select class="status-select" data-id="${task.id}">
+                                <option value="todo" ${task.status === 'todo' ? 'selected' : ''}>В работе</option>
+                                <option value="done" ${task.status === 'done' ? 'selected' : ''}>Выполнено</option>
+                                <option value="postponed" ${task.status === 'postponed' ? 'selected' : ''}>Отложено</option>
+                            </select>
+                            <button class="delete-btn" data-id="${task.id}">Удалить</button>
+                        </div>
+                    `;
+                    taskList.appendChild(taskEl);
+                });
+            }
+
+    
+            const total = tasks.length;
+            const completed = tasks.filter(t => t.status === 'done').length;
+            const overdueCount = tasks.filter(t => isOverdue(t.date, t.status)).length;
+            
+            summary.innerHTML = `Всего: ${total} | Выполнено: ${completed} | Просрочено: ${overdueCount}`;
+        }
+
+  
+
+        addBtn.addEventListener('click', () => {
+            const title = titleInput.value.trim();
+            const date = dateInput.value;
+
+            // Валидация
+            if (!title) {
+                errorMsg.textContent = 'Ошибка: Введите название задачи.';
+                return;
+            }
+            if (title.length > 100) {
+                errorMsg.textContent = 'Ошибка: Название не должно превышать 100 символов.';
+                return;
+            }
+            if (!date) {
+                errorMsg.textContent = 'Ошибка: Выберите дату.';
+                return;
+            }
+
+
+            errorMsg.textContent = '';
+
+
+            const newTask = {
+                id: Date.now(),
+                title: title,
+                date: date,
+                status: 'todo'
+            };
+
+
+            tasks.push(newTask);
+            saveTasks();
+            render();
+
+            titleInput.value = '';
+            dateInput.value = '';
+        });
+
+        filterSelect.addEventListener('change', (e) => {
+            currentFilter = e.target.value;
+            render();
+        });
+
+        taskList.addEventListener('click', (e) => {
+ 
+            if (e.target.classList.contains('delete-btn')) {
+                const id = Number(e.target.getAttribute('data-id'));
+                const task = tasks.find(t => t.id === id);
+                
+                if (task && confirm(`Вы уверены, что хотите удалить задачу "${task.title}"?`)) {
+                    tasks = tasks.filter(t => t.id !== id);
+                    saveTasks();
+                    render();
+                }
+            }
+        });
+
+        taskList.addEventListener('change', (e) => {
+            if (e.target.classList.contains('status-select')) {
+                const id = Number(e.target.getAttribute('data-id'));
+                const newStatus = e.target.value;
+                
+                const task = tasks.find(t => t.id === id);
+                if (task) {
+                    task.status = newStatus;
+                    saveTasks();
+                    render(); 
+                }
+            }
+        });
+        
+        loadTasks();
+        render();
+    </script>
+</body>
+</html>
