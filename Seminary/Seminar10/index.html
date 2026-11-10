@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои финансы</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🍯 Мои финансы — Вариант 3</h1>
+
+        <!-- Фильтры -->
+        <div class="filters">
+            <label>Тип:
+                <select id="filter-type">
+                    <option value="all">Все</option>
+                    <option value="income">Доход</option>
+                    <option value="expense">Расход</option>
+                </select>
+            </label>
+            <label>Категория:
+                <select id="filter-category">
+                    <option value="all">Все</option>
+                    <!-- Категории добавим через JS -->
+                </select>
+            </label>
+            <label>Дата от: <input type="date" id="filter-date-from"></label>
+            <label>Дата до: <input type="date" id="filter-date-to"></label>
+            <button id="reset-filters">Сбросить</button>
+        </div>
+
+        <!-- Таблица -->
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th data-sort="date">Дата ⬍</th>
+                    <th data-sort="type">Тип ⬍</th>
+                    <th data-sort="category">Категория ⬍</th>
+                    <th data-sort="description">Описание ⬍</th>
+                    <th data-sort="amount">Сумма ⬍</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Сюда будут вставляться строки -->
+            </tbody>
+        </table>
+
+        <!-- Итоги -->
+        <div class="summary">
+            <span>Доходы: <strong id="total-income">0 ₽</strong></span>
+            <span>Расходы: <strong id="total-expense">0 ₽</strong></span>
+            <span>Баланс: <strong id="total-balance">0 ₽</strong></span>
+            <span>Операций: <strong id="total-count">0</strong></span>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
